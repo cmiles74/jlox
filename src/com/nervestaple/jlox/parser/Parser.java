@@ -12,6 +12,4 @@ public class Parser {
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
     }
-
-
 }
