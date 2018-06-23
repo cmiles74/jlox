@@ -1,6 +1,6 @@
 package com.nervestaple.jlox.scanner;
 
-enum TokenType {
+public enum TokenType {
 
     // single characters
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, COMMA ,DOT, MINUS, PLUS,
