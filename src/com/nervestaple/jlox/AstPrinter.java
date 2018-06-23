@@ -1,8 +1,6 @@
 package com.nervestaple.jlox;
 
 import com.nervestaple.jlox.parser.Expr;
-import com.nervestaple.jlox.scanner.Token;
-import com.nervestaple.jlox.scanner.TokenType;
 
 public class AstPrinter implements Expr.Visitor<String> {
 

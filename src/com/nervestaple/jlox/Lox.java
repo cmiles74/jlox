@@ -11,9 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static java.lang.System.out;
-import static java.lang.System.in;
-import static java.lang.System.err;
+import static java.lang.System.*;
 
 public class Lox {
 
