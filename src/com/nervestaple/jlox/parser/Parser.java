@@ -4,6 +4,7 @@ import com.nervestaple.jlox.Lox;
 import com.nervestaple.jlox.scanner.Token;
 import com.nervestaple.jlox.scanner.TokenType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.nervestaple.jlox.scanner.TokenType.*;
@@ -31,6 +32,11 @@ public class Parser {
 
     }
 
+    private ParseError error(Token token, String message) {
+        Lox.error(token, message);
+        return new ParseError();
+    }
+
     private Expr expression() {
         return ternary();
     }
@@ -47,7 +53,7 @@ public class Parser {
                 Expr right = ternaryThen();
                 expr = new Expr.Binary(expr, operator, right);
             } catch (ParseError error) {
-                throw error(peek(), "Expecting expression after ternary (\"?\") operator");
+                throw error(peek(), "Error parsing expression after ternary \"?\" operator");
             }
         }
 
@@ -199,11 +205,6 @@ public class Parser {
 
             advance();
         }
-    }
-
-    private ParseError error(Token token, String message) {
-        Lox.error(token, message);
-        return new ParseError();
     }
 
     private Token consume(TokenType type, String message) {
