@@ -3,7 +3,7 @@ package com.nervestaple.jlox.scanner;
 public enum TokenType {
 
     // single characters
-    LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, COMMA ,DOT, MINUS, PLUS,
+    LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, COMMA, DOT, MINUS, PLUS,
     SEMICOLON, SLASH, STAR,
 
     // one or two characters

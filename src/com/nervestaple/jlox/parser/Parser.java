@@ -42,8 +42,14 @@ public class Parser {
         while (match(BANG_EQUAL, EQUAL_EQUAL)) {
 
             Token operator = previous();
-            Expr right = comparison();
-            expr = new Expr.Binary(expr, operator, right);
+
+            try {
+
+                Expr right = comparison();
+                expr = new Expr.Binary(expr, operator, right);
+            } catch (ParseError error) {
+                throw error(peek(), "Expecting right-hand operand after " + previous().lexeme);
+            }
         }
 
         return expr;
@@ -56,8 +62,13 @@ public class Parser {
         while(match(MINUS, PLUS)) {
 
             Token operator = previous();
-            Expr right = multiplication();
-            expr = new Expr.Binary(expr, operator, right);
+
+            try {
+                Expr right = multiplication();
+                expr = new Expr.Binary(expr, operator, right);
+            } catch (ParseError error) {
+                throw error(peek(), "Expecting right-hand operand after " + previous().lexeme);
+            }
         }
 
         return expr;
@@ -70,8 +81,13 @@ public class Parser {
         while (match(SLASH, STAR)) {
 
             Token operator = previous();
-            Expr right = unary();
-            expr = new Expr.Binary(expr, operator, right);
+
+            try {
+                Expr right = unary();
+                expr = new Expr.Binary(expr, operator, right);
+            } catch (ParseError error) {
+                throw error(peek(), "Expecting right-hand operand after " + previous().lexeme);
+            }
         }
 
         return expr;
@@ -82,8 +98,13 @@ public class Parser {
         if (match(BANG, MINUS)) {
 
             Token operator = previous();
-            Expr right = unary();
-            return new Expr.Unary(operator, right);
+
+            try {
+                Expr right = unary();
+                return new Expr.Unary(operator, right);
+            } catch (ParseError error) {
+                throw error(peek(), "Expecting right-hand operand after " + previous().lexeme);
+            }
         }
 
         return primary();
@@ -110,7 +131,7 @@ public class Parser {
         if (match(LEFT_PAREN)) {
 
             Expr expr = expression();
-            consume(RIGHT_PAREN, "Expecting \")\" after expression");
+            consume(RIGHT_PAREN, "Expecting \")\" after expression \"" + previous().lexeme + "\"");
             return new Expr.Grouping(expr);
         }
 
