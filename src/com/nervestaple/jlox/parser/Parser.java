@@ -32,7 +32,44 @@ public class Parser {
     }
 
     private Expr expression() {
-        return equality();
+        return ternary();
+    }
+
+    private Expr ternary() {
+
+        Expr expr = equality();
+
+        while (match(TERN_OP)) {
+
+            Token operator = previous();
+
+            try {
+                Expr right = ternaryThen();
+                expr = new Expr.Binary(expr, operator, right);
+            } catch (ParseError error) {
+                throw error(peek(), "Expecting expression after ternary (\"?\") operator");
+            }
+        }
+
+        return expr;
+    }
+
+    private Expr ternaryThen() {
+
+        Expr expr = equality();
+
+        consume(TERN_ELSE, "Expecting \":\" for ternary operation");
+
+        Token operator = previous();
+
+        try {
+            Expr right = unary();
+            expr = new Expr.Binary(expr, operator, right);
+        } catch (ParseError error) {
+            throw error(peek(), "Expecting expression after \":\" for ternary operation");
+        }
+
+        return expr;
     }
 
     private Expr equality() {
