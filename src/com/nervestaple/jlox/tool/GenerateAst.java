@@ -88,7 +88,7 @@ public class GenerateAst {
 
         writer.println("  public static class " + className + " extends " + baseName + " {");
         writer.println("");
-        writer.println("    " + className + "(" + fieldList + ") {");
+        writer.println("    public " + className + "(" + fieldList + ") {");
 
         // store parameters in fields
         String[] fields = fieldList.split(", ");

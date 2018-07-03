@@ -1,7 +1,10 @@
 package com.nervestaple.jlox;
 
+import com.nervestaple.jlox.parser.Expr;
+import com.nervestaple.jlox.parser.Parser;
 import com.nervestaple.jlox.scanner.Scanner;
 import com.nervestaple.jlox.scanner.Token;
+import com.nervestaple.jlox.scanner.TokenType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,9 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static java.lang.System.out;
-import static java.lang.System.in;
-import static java.lang.System.err;
+import static java.lang.System.*;
 
 public class Lox {
 
@@ -23,8 +24,17 @@ public class Lox {
         report(line, "", message);
     }
 
+    public static void error(Token token, String message) {
+
+        if(token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
+        }
+    }
+
     private static void report(int line, String where, String message) {
-        err.println("[line " + line + "] Error " + where + ": " + message);
+        err.println("[line " + line + "] Error" + where + ": " + message);
         hadError = true;
     }
 
@@ -56,9 +66,14 @@ public class Lox {
 
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.parse();
 
-        for (Token token : tokens) {
-            out.println(token);
+        // stop if there was an error
+        if (hadError) {
+            return;
         }
+
+        System.out.println(new AstPrinter().print(expression));
     }
 }
