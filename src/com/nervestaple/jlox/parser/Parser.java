@@ -4,7 +4,6 @@ import com.nervestaple.jlox.Lox;
 import com.nervestaple.jlox.scanner.Token;
 import com.nervestaple.jlox.scanner.TokenType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.nervestaple.jlox.scanner.TokenType.*;

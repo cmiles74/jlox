@@ -162,22 +162,23 @@ public class Scanner {
 
             if (peek() == '\n') {
                 line++;
-                advance();
             }
+
+            advance();
 
             // unterminated string
             if (isAtEnd()) {
                 Lox.error(line, "Unterminated string");
                 return;
             }
-
-            // the closing "
-            advance();
-
-            // trim surrounding quotes
-            String value = source.substring(start + 1, current - 1);
-            addToken(STRING, value);
         }
+
+        // the closing "
+        advance();
+
+        // trim surrounding quotes
+        String value = source.substring(start + 1, current - 1);
+        addToken(STRING, value);
     }
 
     private boolean isAlpha(char c) {

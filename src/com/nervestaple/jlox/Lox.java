@@ -1,5 +1,7 @@
 package com.nervestaple.jlox;
 
+import com.nervestaple.jlox.interpreter.Interpreter;
+import com.nervestaple.jlox.interpreter.RuntimeError;
 import com.nervestaple.jlox.parser.Expr;
 import com.nervestaple.jlox.parser.Parser;
 import com.nervestaple.jlox.scanner.Scanner;
@@ -19,6 +21,16 @@ import static java.lang.System.*;
 public class Lox {
 
     private static boolean hadError = false;
+
+    private static boolean hadRuntimeError = false;
+
+    private static final Interpreter interpreter = new Interpreter();
+
+    public static void runtimeError(RuntimeError error) {
+
+        System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
+        hadRuntimeError = true;
+    }
 
     public static void error(int line, String message) {
         report(line, "", message);
@@ -45,7 +57,11 @@ public class Lox {
 
         // indicate that we've encountered an error
         if (hadError) {
-            System.exit(0);
+            System.exit(65);
+        }
+
+        if(hadRuntimeError) {
+            System.exit(70);
         }
     }
 
@@ -74,6 +90,6 @@ public class Lox {
             return;
         }
 
-        System.out.println(new AstPrinter().print(expression));
+        interpreter.interpret(expression);
     }
 }
