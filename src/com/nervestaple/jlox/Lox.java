@@ -91,6 +91,6 @@ public class Lox {
             return;
         }
 
-        interpreter.interpret(statements);
+        interpreter.replInterpret(statements);
     }
 }
