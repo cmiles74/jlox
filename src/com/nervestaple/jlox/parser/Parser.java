@@ -66,6 +66,10 @@ public class Parser {
 
     private Stmt statement() {
 
+        if(match(IF)) {
+            return ifStatement();
+        }
+
         if (match(PRINT)) {
             return printStatement();
         }
@@ -75,6 +79,22 @@ public class Parser {
         }
 
         return expressionStatement();
+    }
+
+    private Stmt ifStatement() {
+
+        consume(LEFT_PAREN, "Expecting '(' after 'if'");
+        Expr condition = expression();
+        consume(RIGHT_PAREN, "Expecting ')' after if condition");
+
+        Stmt thenBranch = statement();
+
+        Stmt elseBranch = null;
+        if (match(ELSE)) {
+            elseBranch = statement();
+        }
+
+        return new Stmt.If(condition, thenBranch, elseBranch);
     }
 
     private Stmt printStatement() {
@@ -99,7 +119,7 @@ public class Parser {
             statements.add(declaration());
         }
 
-        consume(RIGHT_BRACE, "Expeccted \"}\" after block");
+        consume(RIGHT_BRACE, "Expected \"}\" after block");
         return statements;
     }
 
@@ -148,6 +168,19 @@ public class Parser {
     }
 
     private Expr comparison() {
+
+        Expr expr = addition();
+
+        while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
+            Token operator = previous();
+            Expr right = addition();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    private Expr addition() {
 
         Expr expr = multiplication();
 

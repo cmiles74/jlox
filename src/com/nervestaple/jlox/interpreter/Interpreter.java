@@ -22,25 +22,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
     }
 
-    public void replInterpret(List<Stmt> statements) {
-
-        try {
-            for (Stmt statement : statements) {
-
-                if(statement instanceof Stmt.Expression) {
-                    System.out.println(stringify(evaluate(((Stmt.Expression) statement).expression)));
-                } else if(statement instanceof Stmt.Var) {
-                    execute(statement);
-                    System.out.println(stringify(environment.get((((Stmt.Var) statement).name))));
-                } else if(statement instanceof Stmt.Block) {
-                    execute(statement);
-                }
-            }
-        } catch (RuntimeError error) {
-            Lox.runtimeError(error);
-        }
-    }
-
     private void execute(Stmt stmt) {
         stmt.accept(this);
     }
@@ -49,6 +30,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Void visit(Stmt.Expression stmt) {
 
         evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visit(Stmt.If stmt) {
+
+        if (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.thenBranch);
+        } else if (stmt.elseBranch != null) {
+            execute(stmt.elseBranch);
+        }
+
         return null;
     }
 
