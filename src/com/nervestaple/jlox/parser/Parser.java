@@ -109,7 +109,7 @@ public class Parser {
 
     private Expr assignment() {
 
-        Expr expr = ternary();
+        Expr expr = equality();
 
         if (match(EQUAL)) {
 
@@ -122,43 +122,6 @@ public class Parser {
             }
 
             error(equals, "Invalid assignment target");
-        }
-
-        return expr;
-    }
-
-    private Expr ternary() {
-
-        Expr expr = equality();
-
-        while (match(TERN_OP)) {
-
-            Token operator = previous();
-
-            try {
-                Expr right = ternaryThen();
-                expr = new Expr.Binary(expr, operator, right);
-            } catch (ParseError error) {
-                throw error(peek(), "Error parsing expression after ternary \"?\" operator");
-            }
-        }
-
-        return expr;
-    }
-
-    private Expr ternaryThen() {
-
-        Expr expr = equality();
-
-        consume(TERN_ELSE, "Expecting \":\" for ternary operation");
-
-        Token operator = previous();
-
-        try {
-            Expr right = unary();
-            expr = new Expr.Binary(expr, operator, right);
-        } catch (ParseError error) {
-            throw error(peek(), "Expecting expression after \":\" for ternary operation");
         }
 
         return expr;
