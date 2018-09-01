@@ -6,6 +6,7 @@ import com.nervestaple.jlox.scanner.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 import static com.nervestaple.jlox.scanner.TokenType.*;
 
@@ -66,6 +67,10 @@ public class Parser {
 
     private Stmt statement() {
 
+        if (match(FOR)) {
+            return forStatement();
+        }
+
         if(match(IF)) {
             return ifStatement();
         }
@@ -74,11 +79,68 @@ public class Parser {
             return printStatement();
         }
 
+        if (match(WHILE)) {
+            return whileStatement();
+        }
+
         if (match(LEFT_BRACE)) {
             return new Stmt.Block(block());
         }
 
         return expressionStatement();
+    }
+
+    private Stmt forStatement() {
+
+        consume(LEFT_PAREN, "Expected '(' after 'for'");
+
+        Stmt initializer = null;
+        if (match(SEMICOLON)) {
+            initializer = null;
+        } else if (match(VAR)) {
+            initializer = varDeclaration();
+        } else {
+            initializer = expressionStatement();
+        }
+
+        Expr condition = null;
+        if(!check(SEMICOLON)) {
+            condition = expression();
+        }
+        consume(SEMICOLON, "Expcted ';' after loop condition");
+
+        Expr increment = null;
+        if(!check(RIGHT_PAREN)) {
+            increment = expression();
+        }
+        consume(RIGHT_PAREN, "Expected ')' after for clause");
+
+        Stmt body = statement();
+
+        // increment
+        if (increment != null) {
+            body = new Stmt.Block(Arrays.asList(
+                    body,
+                    new Stmt.Expression(increment)
+            ));
+        }
+
+        // condition
+        if (condition == null) {
+            condition = new Expr.Literal(true);
+        }
+        body = new Stmt.While(condition, body);
+
+        return body;
+    }
+
+    private Stmt whileStatement() {
+
+        consume(LEFT_PAREN, "Expected '(' after 'while'");
+        Expr condition = expression();
+        consume(RIGHT_PAREN, "Expected ')' after condition");
+        Stmt body = statement();
+        return new Stmt.While(condition, body);
     }
 
     private Stmt ifStatement() {
@@ -129,7 +191,7 @@ public class Parser {
 
     private Expr assignment() {
 
-        Expr expr = equality();
+        Expr expr = or();
 
         if (match(EQUAL)) {
 
@@ -142,6 +204,32 @@ public class Parser {
             }
 
             error(equals, "Invalid assignment target");
+        }
+
+        return expr;
+    }
+
+    private Expr or() {
+
+        Expr expr = and();
+
+        while (match(OR)) {
+            Token operator = previous();
+            Expr right = and();
+            expr = new Expr.Logical(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    private Expr and() {
+
+        Expr expr = equality();
+
+        while (match(AND)) {
+            Token operator = previous();
+            Expr right = equality();
+            expr = new Expr.Logical(expr, operator, right);
         }
 
         return expr;
