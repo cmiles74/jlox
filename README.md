@@ -1,7 +1,7 @@
 # JLox: A Lox Interpreter in Java
 
 This project represnets my progress as I work through the exercised and examples on the 
-["Crafting Interpreters"]()http://craftinginterpreters.com) website.
+["Crafting Interpreters"](http://craftinginterpreters.com) website.
 
 # Building the Project
 
