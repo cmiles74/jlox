@@ -101,6 +101,10 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     @Override
     public Void visit(Stmt.Return stmt) {
 
+        if(currentFunction == FunctionType.NONE) {
+            Lox.error(stmt.keyword, "Cannot return from outside a function");
+        }
+
         if (stmt.value != null) {
             resolve(stmt.value);
         }
