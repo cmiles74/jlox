@@ -25,3 +25,17 @@ fun makeCounter() {
 var counter = makeCounter();
 counter();
 counter();
+print "";
+
+print "Closures";
+print "--------";
+var a = "global";
+{
+  fun showA() {
+    print a;
+  }
+
+  showA();
+  var a = "block";
+  showA();
+}

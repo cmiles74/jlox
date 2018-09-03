@@ -29,5 +29,5 @@ You can run Lox code by passing the path of the file to the main method of the
 Lox class. A test file is included, you can give that a try.
 
 ```
-$ java -cp out/production/jlox com.nervestaple.jlox.Main "test/fibonacci.lox"
+$ java -cp out/production/jlox com.nervestaple.jlox.Main "test/test.lox"
 ``` 
