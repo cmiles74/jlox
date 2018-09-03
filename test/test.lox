@@ -39,3 +39,8 @@ var a = "global";
   var a = "block";
   showA();
 }
+print "";
+
+print "Built-ins";
+print "---------";
+print clock();
