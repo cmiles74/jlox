@@ -5,6 +5,7 @@ import com.nervestaple.jlox.interpreter.RuntimeError;
 import com.nervestaple.jlox.parser.Expr;
 import com.nervestaple.jlox.parser.Parser;
 import com.nervestaple.jlox.parser.Stmt;
+import com.nervestaple.jlox.resolver.Resolver;
 import com.nervestaple.jlox.scanner.Scanner;
 import com.nervestaple.jlox.scanner.Token;
 import com.nervestaple.jlox.scanner.TokenType;
@@ -87,6 +88,14 @@ public class Lox {
         List<Stmt> statements = parser.parse();
 
         // stop if there was an error
+        if (hadError) {
+            return;
+        }
+
+        Resolver resolver = new Resolver(interpreter);
+        resolver.resolve(statements);
+
+        // stop if there was a resolution error
         if (hadError) {
             return;
         }

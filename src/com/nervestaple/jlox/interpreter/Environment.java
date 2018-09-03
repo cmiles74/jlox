@@ -22,6 +22,10 @@ public class Environment {
         values.put(name, value);
     }
 
+    public Object getAt(int distance, String name) {
+        return ancestor(distance).values.get(name);
+    }
+
     public Object get(Token name) {
 
         if(values.containsKey(name.lexeme)) {
@@ -33,6 +37,10 @@ public class Environment {
         }
 
         throw new RuntimeError(name, "Undefined variable \"" + name.lexeme + "\"");
+    }
+
+    public void assignAt(int distance, Token name, Object value) {
+        ancestor(distance).values.put(name.lexeme, value);
     }
 
     public void assign(Token name, Object value) {
@@ -48,5 +56,15 @@ public class Environment {
         }
 
         throw new RuntimeError(name, "Undefined variable \"" + name.lexeme + "\"");
+    }
+
+    private Environment ancestor(int distance) {
+
+        Environment environment = this;
+        for (int index = 0; index < distance; index++) {
+            environment = environment.enclosing;
+        }
+
+        return environment;
     }
 }
