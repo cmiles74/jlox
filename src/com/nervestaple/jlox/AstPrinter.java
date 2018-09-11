@@ -39,6 +39,11 @@ public class AstPrinter implements Expr.Visitor<String> {
     }
 
     @Override
+    public String visit(Expr.This expr) {
+        return expr.keyword.toString();
+    }
+
+    @Override
     public String visit(Expr.Grouping expr) {
         return parenthesize("group", expr.expression);
     }
