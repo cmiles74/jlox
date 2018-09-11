@@ -44,3 +44,15 @@ print "";
 print "Built-ins";
 print "---------";
 print clock();
+print "";
+
+print "Classes";
+print "-------";
+
+class DevonshireCream {
+  serveOn() {
+    return "Scones";
+  }
+}
+
+print DevonshireCream;

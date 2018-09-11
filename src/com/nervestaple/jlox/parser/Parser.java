@@ -42,6 +42,10 @@ public class Parser {
 
         try {
 
+            if (match(CLASS)) {
+                return classDeclaration();
+            }
+
             if (match(FUN)) {
                 return function("function");
             }
@@ -55,6 +59,21 @@ public class Parser {
             synchronize();
             return null;
         }
+    }
+
+    private Stmt classDeclaration() {
+
+        Token name = consume(IDENTIFIER, "Expecting a class name");
+        consume(LEFT_BRACE, "Expecting '{' before the class body");
+
+        List<Stmt.Function> methods = new ArrayList<>();
+        while(!check(RIGHT_BRACE) && !isAtEnd()) {
+            methods.add(function("method"));
+        }
+
+        consume(RIGHT_BRACE, "Expecting '}' after the class body");
+
+        return new Stmt.Class(name, methods);
     }
 
     private Stmt varDeclaration() {
