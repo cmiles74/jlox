@@ -13,7 +13,8 @@ import java.util.Stack;
 
 enum FunctionType {
     NONE,
-    FUNCTION
+    FUNCTION,
+    METHOD
 }
 
 public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
@@ -39,6 +40,12 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
         declare(stmt.name);
         define(stmt.name);
+
+        for (Stmt.Function method : stmt.methods) {
+            FunctionType declaration = FunctionType.METHOD;
+            resolveFunction(method, declaration);
+        }
+
         return null;
     }
 
@@ -146,6 +153,12 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Void visit(Expr.Get expr) {
+        resolve(expr.object);
+        return null;
+    }
+
+    @Override
     public Void visit(Expr.Grouping expr) {
         resolve(expr.expression);
         return null;
@@ -160,6 +173,13 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     public Void visit(Expr.Logical expr) {
         resolve(expr.left);
         resolve(expr.right);
+        return null;
+    }
+
+    @Override
+    public Void visit(Expr.Set expr) {
+        resolve(expr.value);
+        resolve(expr.object);
         return null;
     }
 
