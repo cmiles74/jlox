@@ -29,7 +29,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
             @Override
             public Object call(Interpreter interpreter, List<Object> arguments) {
-                return System.currentTimeMillis() / 1000;
+                return Double.valueOf(System.currentTimeMillis() / 1000);
             }
 
             @Override
