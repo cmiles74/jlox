@@ -42,7 +42,7 @@ public class LoxFunction implements LoxCallable {
             if (isInitializer) {
                 return closure.getAt(0, "this");
             }
-            
+
             return returnValue.value;
         }
 
