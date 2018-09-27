@@ -19,7 +19,8 @@ The "out" directory will now contain the code generator. Next, run that
 generator.
 
 ```
-$ java -cp out/production/jlox com.nervestaple.jlox.tool.GenerateAst generated/com/nervestaple/jlox/parser
+$ java -cp out/production/jlox com.nervestaple.jlox.tool.GenerateAst\
+generated/com/nervestaple/jlox/parser
 ```
 
 With the AST classes generated, you can now open up the project in your IDE 
