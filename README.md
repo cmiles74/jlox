@@ -1,10 +1,12 @@
-# JLox: A Lox Interpreter in Java
+JLox: A Lox Interpreter in Java
+===============================
 
 This project represnets my progress as I work through the exercised and 
 examples on the ["Crafting Interpreters"](http://craftinginterpreters.com) 
 website.
 
-# Building the Project
+Building the Project
+--------------------
 
 First you will need to generate the source code for the AST classes.
 
@@ -23,7 +25,8 @@ $ java -cp out/production/jlox com.nervestaple.jlox.tool.GenerateAst generated/c
 With the AST classes generated, you can now open up the project in your IDE 
 (i.e. IntelliJ IDEA) and compile the rest of the project.
 
-# Running Lox Code
+Running Lox Code
+----------------
 
 You can run Lox code by passing the path of the file to the main method of the 
 Lox class. A test file is included, you can give that a try.
